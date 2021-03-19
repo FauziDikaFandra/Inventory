@@ -1,0 +1,56 @@
+﻿@model New_Web.Models.ViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GenerateExcel</title>
+</head>
+<body>
+    <div>
+        <img src="/Content/img/logo.png" alt="" />
+    </div>
+    <div>
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>ItemCode</th>
+                    <th>FirstStock</th>
+                    <th>Sales</th>
+                    <th>Refund</th>
+                    <th>Return</th>
+                    <th>Receipt</th>
+                    <th>Adjust +</th>
+                    <th>Adjust -</th>
+                    <th>Transfer Out</th>
+                    <th>Transfer In</th>
+                    <th>Last Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Inventory)
+                {
+                    <tr>
+                        <td>@item.ItemCode</td>
+                        <td>@item.FirstStock</td>
+                        <td>@item.Sales</td>
+                        <td>@item.Refund</td>
+                        <td>@item.GoodsReturn</td>
+                        <td>@item.GoodsReceiptPO</td>
+                        <td>@item.GoodsReceipt</td>
+                        <td>@item.GoodsIssue</td>
+                        <td>@item.TransferOut</td>
+                        <td>@item.TransferIn</td>
+                        <td>@item.LastStock</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

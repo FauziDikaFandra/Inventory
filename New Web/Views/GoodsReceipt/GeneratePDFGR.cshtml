@@ -1,0 +1,53 @@
+﻿@model New_Web.Models.ViewModelGR
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GeneratePDF</title>
+</head>
+<body>
+    <div>
+        <img src="/Content/img/logo.png" alt="" />
+    </div>
+    <div>
+        @*@Html.Raw(Model.PDFContent)*@
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>GR Code</th>
+                    <th>Status</th>
+                    <th>DocDate</th>
+                    <th>VendorCode</th>
+                    <th>VendorName</th>
+                    <th>ItemCode</th>
+                    <th>Description</th>
+                    <th>CurrentPrice</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GoodsReceiptDetails)
+                {
+                    <tr>
+                        <td>@item.GRCode</td>
+                        <td>@item.Status</td>
+                        <td>@item.DocDate</td>
+                        <td>@item.VendorCode</td>
+                        <td>@item.VendorName</td>
+                        <td>@item.ItemCode</td>
+                        <td>@item.Description</td>
+                        <td>@item.CurrentPrice</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

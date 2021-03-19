@@ -1,0 +1,12 @@
+﻿
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Home {
+    <div class="starter-template mt-3  shadow p-3 mb-5 bg-white rounded">
+        <h4>Welcome, </h4>
+        <p class="lead">@Session["login"]<br> Selamat Bekerja !!!.</p>
+    </div>
+}

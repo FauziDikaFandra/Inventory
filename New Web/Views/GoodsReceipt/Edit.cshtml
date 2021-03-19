@@ -1,0 +1,97 @@
+﻿@model New_Web.Models.ViewModelGR
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Home {
+    <h2 class="mb-3 mt-3"></h2> <!-- yield itu parameter dikirim ke page yg section nya title -->
+
+    <div class="starter-template mt-3  shadow p-3 mb-2 bg-white rounded">
+        <form action="@Url.Action("Edit", "GoodsReceipt")" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Document Date</label>
+                    @*<input type="date" class="form-control" id="docdate" name="docdate"  data-date-format="DD MMMM YYYY" value="@DateTime.Now" readonly>*@
+                    @Html.EditorFor(model => model.VendorBack.DOB, "", new { htmlAttributes = new { @class = "form-control", placeholder = "Doc Date", @readonly = "true", id = "docdate", name = "docdate" } })
+                    @Html.ValidationMessageFor(model => model.VendorBack.DOB, "", new { @class = "text-danger" })
+                    @*untuk menampilkan date data di model atau database harus ada isinya*@
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="status">Status</label>
+                    <select id="status" class="form-control" name="status">
+                        <option @(Model.Status.Status == "OPEN" ? " selected" : "")>OPEN</option>
+                        <option @(Model.Status.Status == "POST" ? " selected" : "")>POST</option>
+                        <option @(Model.Status.Status == "CLOSE" ? " selected" : "")>CLOSE</option>
+                        <option @(Model.Status.Status == "CANCEL" ? " selected" : "")>CANCEL</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="vendor">Vendor Code</label>
+                    <select id="vendor" class="form-control" name="vendor">
+                        @foreach (var item in Model.Vendor)
+                        {
+                            <option @(Model.VendorBack.VendorCode == item.VendorCode.Substring(0, 3) ? " selected" : "")>@item.VendorCode - @item.VendorName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="remarks">Remarks</label>
+                    <input type="text" class="form-control" id="remarks" placeholder="Remarks" name="remarks" value="@Model.Status.Remarks">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3 pt-1">
+                    <input type="hidden" id="grcode" name="grcode" value="@Model.Status.GRCode" />
+                    <input type="hidden" id="tgl" name="tgl" value="@DateTime.Now.Day" />
+                    <input type="hidden" id="bulan" name="bulan" value="@DateTime.Now.Month" />
+                    <input type="hidden" id="tahun" name="tahun" value="@DateTime.Now.Year" />
+                    <button type="submit" class="btn btn-primary mt-1"><span class="mr-2 mt-1" data-feather="save"> </span>Create</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+}
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/MM/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0",
+            });
+            var currentdate = new Date();
+
+            $('input[type=datetime]').val($.datepicker.formatDate('dd/MM/yy', currentdate));
+        });
+
+        $('#docdate').change(function () {
+            var date = new Date($('#docdate').val());
+            $('#tgl').val(date.getDay());
+            $('#bulan').val(date.getMonth() + 1);
+            $('#tahun').val(date.getFullYear());
+        });
+
+       
+
+    </script>
+
+}

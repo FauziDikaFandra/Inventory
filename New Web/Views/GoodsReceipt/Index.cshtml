@@ -1,0 +1,204 @@
+﻿@model New_Web.Models.ViewModelGR
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Home {
+    <h2 class="mb-3 mt-3"></h2> <!-- yield itu parameter dikirim ke page yg section nya title -->
+
+    <div class="starter-template mt-3  shadow p-3 mb-2 bg-white rounded">
+        <form action="@Url.Action("Details", "GoodsReceipt")" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Document Date</label>
+                    @*<input type="date" class="form-control" id="docdate" name="docdate"  data-date-format="DD MMMM YYYY" value="@DateTime.Now" readonly>*@
+                    @Html.EditorFor(model => model.VendorBack.DOB,"", new { htmlAttributes = new { @class = "form-control", placeholder = "Doc Date", @readonly = "true", id = "docdate", name = "docdate", @Value = @Model.VendorBack.DOB.ToString("dd/MMMM/yyyy") } })
+                    @Html.ValidationMessageFor(model => model.VendorBack.DOB, "", new { @class = "text-danger" })
+                    @*untuk menampilkan date data di model atau database harus ada isinya*@
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="status">Status</label>
+                    <select id="status" class="form-control" name="status">                      
+                        <option @(Model.Status.Status == "ALL STATUS" ? " selected" : "")>ALL STATUS</option>
+                        <option @(Model.Status.Status == "OPEN" ? " selected" : "")>OPEN</option>
+                        <option @(Model.Status.Status == "POST" ? " selected" : "")>POST</option>
+                        <option @(Model.Status.Status == "CLOSE" ? " selected" : "")>CLOSE</option>
+                        <option @(Model.Status.Status == "CANCEL" ? " selected" : "")>CANCEL</option>                        
+                    </select>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="vendor">Vendor Code</label>
+                    <select id="vendor" class="form-control" name="vendor">
+                        <option @(Model.VendorBack.VendorCode == "**A" ? " selected" : "")>**ALL VENDOR**</option>
+                        @foreach (var item in Model.Vendor)
+                        {
+                            <option @(Model.VendorBack.VendorCode == item.VendorCode.Substring(0,3) ? " selected" : "")>@item.VendorCode - @item.VendorName</option>
+                        }
+                    </select>
+        </div>
+
+
+
+        </div>
+        <div class="form-row">
+
+            <div class="form-group col-md-6">
+                <input type="hidden" id="tgl" name="tgl" value="@Model.VendorBack.DOB.Day" />
+                <input type="hidden" id="bulan" name="bulan" value="@Model.VendorBack.DOB.Month" />
+                <input type="hidden" id="tahun" name="tahun" value="@Model.VendorBack.DOB.Year" />
+
+                <button type="submit" class="btn btn-primary"><span class="mr-2" data-feather="monitor"> </span>Show</button>
+                <input type="hidden" name="_token" value="<?php echo csrf_token() ?>">
+                <!-- <div class="dropdown"> -->
+                <button class="btn btn-primary" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span data-feather="printer"></span> Export
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" id="linkExcel" href="#"><span class="mr-2" data-feather="paperclip"></span>Excel</a>
+                    <a class="dropdown-item" id="link" href="#"><span class="mr-2" data-feather="paperclip"></span>PDF</a>
+                </div>
+                <!-- </div> -->
+
+            </div>
+
+        </div>
+
+        </form>
+
+
+    </div>
+
+    <div class="table-responsive mt-3  shadow p-3 mb-5 bg-white rounded">
+        <a class="btn btn-primary btn-sm mb-2" href="@Url.Action("Create", "GoodsReceipt")"><span class="mr-2" data-feather="plus"></span>Add New</a>
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th width="150px">GR Code</th>
+                    <th width="80px">Status</th>
+                    <th width="150px">Document Date</th>
+                    <th width="130px">Vendor Code</th>
+                    <th width="250px">Vendor Name</th>
+                    <th>Remarks</th>
+                    <th width="70px"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GoodsReceipt)
+                {
+            <tr>
+                <td>@item.GRCode</td>
+                <td>@item.Status</td>
+                <td>@item.DocDate.ToString("dd MMM yyyy")</td>
+                <td>@item.VendorCode</td>
+                <td>@item.VendorName</td>
+                <td>@item.Remarks</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default border btn-sm " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span data-feather="menu"></span>
+                        </button>
+                        <div class="dropdown-menu" id="ddm" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="@Url.Action("Edit", "GoodsReceipt", new { GRCode = @item.GRCode })"><span class="mr-2" data-feather="edit"></span>Edit</a>
+                            <a class="dropdown-item" href="@Url.Action("Line", "GoodsReceipt", new { GRCode = @item.GRCode })"><span class="mr-2" data-feather="file-text"></span>Details</a>
+                            <a class="dropdown-item" data-itemid="@item.GRCode" href="#"><span class="mr-2" data-feather="delete"></span>Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                            
+            </tr>
+                 }
+            @*<tr>
+                <td colspan="7" class="text-center font-italic"><span style="color: black;">No record found !!!'</span></td>
+            </tr>*@
+
+            </tbody>
+    </table>
+  
+    <div>
+
+    </div>
+    </div>
+
+}
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+
+<script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/MM/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0",
+            });
+            var currentdate = new Date();
+
+            //$('input[type=datetime]').val($.datepicker.formatDate('dd/MM/yy', currentdate));
+        });
+
+        $('#docdate').change(function () {
+            var date = new Date($('#docdate').val());
+            $('#tgl').val(date.getDate());
+            $('#bulan').val(date.getMonth() + 1);
+            $('#tahun').val(date.getFullYear());
+        });
+
+        @*$('#hapus').click(function () {
+            alert('oke');
+            var tgl = $('#tgl').val();
+            var bulan = $('#bulan').val();
+            var tahun = $('#tahun').val();
+            var vendor = $('#vendor').val();
+            var status = $('#status').val();
+            var grcode = $(this).data("grcode");
+            window.location = '@Url.Action("Delete", "GoodsReceipt")?grcode=' + grcode + 'tgl=' + tgl + 'bulan=' + bulan + '&tahun=' + tahun + '&vendor=' + vendor + '&status=' + status;
+        })*@
+
+        $('.dropdown-menu').on('click', 'a.dropdown-item', function () {
+        if ($(this).text() == "Delete") {
+            var tgl = $('#tgl').val();
+            var bulan = $('#bulan').val();
+            var tahun = $('#tahun').val();
+            var vendor = $('#vendor').val();
+            var status = $('#status').val();
+            var grcode = $(this).data("grcode");
+            var grcode = $(this).attr('data-itemid');
+            window.location = '@Url.Action("Delete", "GoodsReceipt")?grcode=' + grcode + '&tgl=' + tgl + '&bulan=' + bulan + '&tahun=' + tahun + '&vendor=' + vendor + '&status=' + status;
+        }
+        });
+
+
+        $('#link').on('click', function () {
+            var tgl = $('#tgl').val();
+            var bulan = $('#bulan').val();
+            var tahun = $('#tahun').val();
+            var vendor = $('#vendor').val();
+            var status = $('#status').val();
+            window.location = '@Url.Action("DownloadPDF", "GoodsReceipt")?vendor=' + vendor + '&docdate=' + bulan + '/' + tgl + '/' + tahun + '&status=' + status;
+        })
+
+        $('#linkExcel').on('click',function () {
+            var tgl = $('#tgl').val();
+            var bulan = $('#bulan').val();
+            var tahun = $('#tahun').val();
+            var vendor = $('#vendor').val();
+            var status = $('#status').val();
+            window.location = '@Url.Action("DownloadExcel", "GoodsReceipt")?vendor=' + vendor + '&docdate=' + bulan + '/' + tgl + '/' + tahun + '&status=' + status;
+        })
+
+</script>
+
+}
